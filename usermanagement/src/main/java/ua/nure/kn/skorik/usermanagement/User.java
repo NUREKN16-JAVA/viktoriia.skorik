@@ -13,7 +13,7 @@ public class User implements Serializable {
 	private String lastName;
 	private Date dateOfBirth;
 	
-	User() {}
+	public User() {}
 	
 	/**
 	* Class constructor specifying User's id, first name, last name and date of birth
