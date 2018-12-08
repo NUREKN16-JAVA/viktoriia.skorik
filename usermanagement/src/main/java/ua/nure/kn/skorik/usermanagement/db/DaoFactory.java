@@ -3,42 +3,49 @@ package ua.nure.kn.skorik.usermanagement.db;
 import java.io.IOException;
 import java.util.Properties;
 
-public class DaoFactory {
-	private static final String USER_DAO = "ua.nure.kn.skorik.usermanagement.db.UserDao";
-	private final Properties properties;
-    private final static DaoFactory INSTANCE = new DaoFactory();
+public abstract class DaoFactory {
+	private static final String DAO_FACTORY = "dao.factory";
+	protected static final String USER_DAO = "ua.nure.kn.skorik.usermanagement.db.UserDao";
+	protected static Properties properties;
+    private static DaoFactory instance;
 	
-	public DaoFactory() {
-		properties = new Properties();
+    static {
+    	properties = new Properties();
 		try {
-			properties.load(getClass().getClassLoader().getResourceAsStream("settings.properties"));
+			properties.load(DaoFactory.class
+					.getClass()
+					.getClassLoader()
+					.getResourceAsStream("settings.properties"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+    }
+    
+	protected DaoFactory() {
+		
 	}
 	
 	public static DaoFactory getInstance() {
-		return INSTANCE;
+		if (instance == null) {
+			try {
+				Class<?> factoryClass = Class.forName(properties
+						.getProperty(DAO_FACTORY));
+				instance = (DaoFactory) factoryClass.newInstance();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return instance;
 	}
 	
-	private ConnectionFactory getConnectionFactory(){
-        String user = properties.getProperty("connection.user");
-        String password = properties.getProperty("connection.password");
-        String url = properties.getProperty("connection.url");
-        String driver = properties.getProperty("connection.driver");
-        return new ConnectionFactoryImpl(driver, url, user, password);
+	protected ConnectionFactory getConnectionFactory(){
+        return new ConnectionFactoryImpl(properties);
     }
 	
-	public UserDao getUserDao () {
-		UserDao userDao = null;
-        try {
-            Class<?> clazz = Class.forName(properties.getProperty(USER_DAO));
-            userDao = (UserDao) clazz.newInstance();
-            userDao.setConnectionFactory(getConnectionFactory());
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | DatabaseException e) {
-        	e.printStackTrace();
-        }
-
-        return userDao;
-    }
+	public abstract UserDao getUserDao();
+	
+	public static void init(Properties prop) {
+		properties = prop;
+		instance = null;
+	}
 }

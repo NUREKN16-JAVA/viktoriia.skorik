@@ -3,6 +3,7 @@ package ua.nure.kn.skorik.usermanagement.db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class ConnectionFactoryImpl implements ConnectionFactory {
 	private String driver = "org.hsqldb.jdbcDriver";
@@ -19,6 +20,13 @@ public class ConnectionFactoryImpl implements ConnectionFactory {
 
 	public ConnectionFactoryImpl() {
 		// TODO Auto-generated constructor stub
+	}
+
+	public ConnectionFactoryImpl(Properties properties) {
+		user = properties.getProperty("connection.user");
+        password = properties.getProperty("connection.password");
+        url = properties.getProperty("connection.url");
+        driver = properties.getProperty("connection.driver");
 	}
 
 	@Override
