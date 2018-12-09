@@ -12,9 +12,11 @@ import junit.extensions.jfcunit.JFCTestCase;
 import junit.extensions.jfcunit.JFCTestHelper;
 import junit.extensions.jfcunit.eventdata.MouseEventData;
 import junit.extensions.jfcunit.finder.NamedComponentFinder;
+import ua.nure.kn.skorik.usermanagement.util.Messages;
 
 public class MainFrameTest extends JFCTestCase {
 	
+	private static final int NUM_COLUMN_ETALON = 3;
 	private MainFrame mainFrame;
 
 	protected void setUp() throws Exception {
@@ -42,6 +44,12 @@ public class MainFrameTest extends JFCTestCase {
 	public void testBrowseControls() {
 		find(JPanel.class, "browsePanel");
 		JTable table = (JTable) find(JTable.class, "userTable");
+		assertEquals(NUM_COLUMN_ETALON, table.getColumnCount());
+		assertEquals(Messages.getString("UserTableModel.ID"), table.getColumnName(0));
+		assertEquals(Messages.getString("UserTableModel.first_name"), table.getColumnName(1));
+		assertEquals(Messages.getString("UserTableModel.second_name"), table.getColumnName(2));
+
+		
 		find(JButton.class, "addButton");
 		find(JButton.class, "editButton");
 		find(JButton.class, "deleteButton");
