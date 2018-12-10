@@ -4,32 +4,28 @@ import java.io.IOException;
 import java.util.Properties;
 
 public abstract class DaoFactory {
+
 	private static final String DAO_FACTORY = "dao.factory";
-	protected static final String USER_DAO = "ua.nure.kn.skorik.usermanagement.db.UserDao";
+	protected static final String USER_DAO = "dao.ua.nure.kn.skorik.usermanagement.db.UserDao";
+    private static final String PROPERTIES_FILE = "settings.properties";
+
 	protected static Properties properties;
     private static DaoFactory instance;
-	
-    static {
-    	properties = new Properties();
+
+	static {
+		properties = new Properties();
 		try {
-			properties.load(DaoFactory.class
-					.getClass()
-					.getClassLoader()
-					.getResourceAsStream("settings.properties"));
+            properties.load(DaoFactory.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE));
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-    }
-    
-	protected DaoFactory() {
-		
 	}
-	
-	public static DaoFactory getInstance() {
+
+	public static synchronized DaoFactory getInstance() {
 		if (instance == null) {
+			Class factoryClass;
 			try {
-				Class<?> factoryClass = Class.forName(properties
-						.getProperty(DAO_FACTORY));
+				factoryClass = Class.forName(properties.getProperty(DAO_FACTORY));
 				instance = (DaoFactory) factoryClass.newInstance();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
@@ -37,13 +33,17 @@ public abstract class DaoFactory {
 		}
 		return instance;
 	}
-	
-	protected ConnectionFactory getConnectionFactory(){
-        return new ConnectionFactoryImpl(properties);
-    }
-	
+
+	protected DaoFactory() {
+
+	}
+
+	protected ConnectionFactory getConnectionFactory() {
+		return new ConnectionFactoryImpl(properties);
+	}
+
 	public abstract UserDao getUserDao();
-	
+
 	public static void init(Properties prop) {
 		properties = prop;
 		instance = null;

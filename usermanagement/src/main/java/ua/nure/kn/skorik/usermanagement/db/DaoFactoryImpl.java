@@ -4,16 +4,16 @@ public class DaoFactoryImpl extends DaoFactory {
 
 	@Override
 	public UserDao getUserDao() {
-		UserDao userDao = null;
-        try {
-            Class<?> clazz = Class.forName(properties.getProperty(USER_DAO));
-            userDao = (UserDao) clazz.newInstance();
-            userDao.setConnectionFactory(getConnectionFactory());
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | DatabaseException e) {
-        	e.printStackTrace();
-        }
+		UserDao result = null;
+		try {
+			Class clazz = Class.forName(properties.getProperty(USER_DAO));
+			result = (UserDao) clazz.newInstance();
+			result.setConnectionFactory(getConnectionFactory());
 
-        return userDao;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return result;
 	}
 
 }

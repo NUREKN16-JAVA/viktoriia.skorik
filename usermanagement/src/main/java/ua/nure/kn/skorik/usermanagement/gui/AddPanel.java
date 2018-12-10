@@ -1,20 +1,27 @@
 package ua.nure.kn.skorik.usermanagement.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.ParseException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import ua.nure.kn.skorik.usermanagement.User;
+import ua.nure.kn.skorik.usermanagement.db.DatabaseException;
 import ua.nure.kn.skorik.usermanagement.util.Messages;
 
 public class AddPanel extends JPanel implements ActionListener {
 	
+	private static final Color GB_COLOR = Color.WHITE;
 	private MainFrame parent;
 	private JPanel buttonPanel;
 	private JPanel fieldPanel;
@@ -111,8 +118,39 @@ public class AddPanel extends JPanel implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
+	public void actionPerformed(ActionEvent e) {
+		if ("ok".equalsIgnoreCase(e.getActionCommand())) {
+			User user = new User();
+			user.setFirstName(getFirstNameField().getText());
+			user.setLastName(getFirstNameField().getText());
+			DateFormat format = DateFormat.getDateInstance();
+			try {
+				user.setDateOfBirth(format.parse(getDateOfBirthField().getText()));
+			} catch (ParseException e1) {
+				getDateOfBirthField().setBackground(Color.RED);
+				return;
+			}
+			try {
+				parent.getDao().create(user);
+			} catch (DatabaseException e1) {
+				JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		clearFields();
+		this.setVisible(false);
 		parent.showBrowsePanel();
+	}
+
+	private void clearFields() {
+		getFirstNameField().setText("");
+		getFirstNameField().setBackground(GB_COLOR);
+		
+		getLastNameField().setText("");
+		getLastNameField().setBackground(GB_COLOR);
+		
+		getDateOfBirthField().setText("");
+		getDateOfBirthField().setBackground(GB_COLOR);
+
 	}
 	
 	
