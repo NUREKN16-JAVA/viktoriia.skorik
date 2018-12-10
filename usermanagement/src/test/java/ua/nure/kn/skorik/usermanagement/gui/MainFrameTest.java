@@ -18,6 +18,7 @@ import junit.extensions.jfcunit.JFCTestHelper;
 import junit.extensions.jfcunit.eventdata.MouseEventData;
 import junit.extensions.jfcunit.eventdata.StringEventData;
 import junit.extensions.jfcunit.finder.NamedComponentFinder;
+import ua.nure.kn.skorik.usermanagement.User;
 import ua.nure.kn.skorik.usermanagement.db.DaoFactory;
 import ua.nure.kn.skorik.usermanagement.db.DaoFactoryImpl;
 import ua.nure.kn.skorik.usermanagement.db.MockUserDao;
@@ -26,8 +27,9 @@ import ua.nure.kn.skorik.usermanagement.util.Messages;
 
 public class MainFrameTest extends JFCTestCase {
 
-	private static final String LASTNAME_ADD_USER = "Doe";
-	private static final String FIRSTNAME_ADD_USER = "John";
+	private static final Long ID_ADD_USER_ETALON = 1L;
+	private static final String LASTNAME_ADD_USER_ETALON = "Doe";
+	private static final String FIRSTNAME_ADD_USER_ETALON = "John";
 	private static final int NUM_ROW_AFTER_ADD_USER_ETALON = 1;
 	private static final int NUM_ROW_BEFORE_ADD_USER_ETALON = 0;
 	private static final int NUM_COLUMN_ETALON = 3;
@@ -82,6 +84,16 @@ public class MainFrameTest extends JFCTestCase {
 	}
 
 	public void testAddUser() {
+		Date now = new Date();
+		User user = new User(FIRSTNAME_ADD_USER_ETALON, LASTNAME_ADD_USER_ETALON, now);
+		
+		User expectedUser = new User(ID_ADD_USER_ETALON, FIRSTNAME_ADD_USER_ETALON, LASTNAME_ADD_USER_ETALON, now);
+		mockUserDao.expectAndReturn("create", user, expectedUser);
+		
+		ArrayList users = new ArrayList();
+		users.add(expectedUser);
+		mockUserDao.expectAndReturn("findAll", users);
+		
 		JTable table = (JTable) find(JTable.class, "userTable");
 		assertEquals(NUM_ROW_BEFORE_ADD_USER_ETALON, table.getRowCount());
 
@@ -96,10 +108,10 @@ public class MainFrameTest extends JFCTestCase {
 		JButton okButton = (JButton) find(JButton.class, "okButton");
 		find(JButton.class, "cancelButton");
 
-		getHelper().sendString(new StringEventData(this, firstNameField, FIRSTNAME_ADD_USER));
-		getHelper().sendString(new StringEventData(this, lastNameField, LASTNAME_ADD_USER));
+		getHelper().sendString(new StringEventData(this, firstNameField, FIRSTNAME_ADD_USER_ETALON));
+		getHelper().sendString(new StringEventData(this, lastNameField, LASTNAME_ADD_USER_ETALON));
 		DateFormat formatter = DateFormat.getDateInstance();
-		String date = formatter.format(new Date());
+		String date = formatter.format(now);
 		getHelper().sendString(new StringEventData(this, dateOfBirthField, date));
 		getHelper().enterClickAndLeave(new MouseEventData(this, okButton));
 
