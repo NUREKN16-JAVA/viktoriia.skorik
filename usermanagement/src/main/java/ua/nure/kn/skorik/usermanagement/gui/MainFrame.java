@@ -7,6 +7,7 @@ import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import ua.nure.kn.skorik.usermanagement.User;
 import ua.nure.kn.skorik.usermanagement.db.DaoFactory;
 import ua.nure.kn.skorik.usermanagement.db.UserDao;
 import ua.nure.kn.skorik.usermanagement.util.Messages;
@@ -18,6 +19,8 @@ public class MainFrame extends JFrame {
 	private JPanel contentPanel;
 	private BrowsePanel browsePanel;
 	private AddPanel addPanel;
+	private EditPanel editPanel;
+    private DetailsPanel detailsPanel;
 	private UserDao dao;
 
 	public MainFrame() {
@@ -81,5 +84,31 @@ public class MainFrame extends JFrame {
 		}
 		return addPanel;
 	}
+
+	public void showEditPanel(User user) {
+        getEditPanel().setUser(user);
+        showPanel(getEditPanel());
+
+    }
+
+    private EditPanel getEditPanel() {
+        if (editPanel == null) {
+            editPanel = new EditPanel(this);
+        }
+        return editPanel;
+    }
+
+    public void showDetailsPanel(User user) {
+        getDetailsPanel().setUser(user);
+        showPanel(getDetailsPanel());
+
+    }
+
+    private DetailsPanel getDetailsPanel() {
+        if (detailsPanel == null) {
+            detailsPanel = new DetailsPanel(this);
+        }
+        return detailsPanel;
+    }
 
 }
