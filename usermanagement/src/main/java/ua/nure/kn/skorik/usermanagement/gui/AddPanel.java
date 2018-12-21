@@ -22,14 +22,14 @@ import ua.nure.kn.skorik.usermanagement.util.Messages;
 public class AddPanel extends JPanel implements ActionListener {
 	
 	private static final Color GB_COLOR = Color.WHITE;
+	private MainFrame parent;
+	private JPanel buttonPanel;
 	private JPanel fieldPanel;
 	private JButton cancelButton;
 	private JButton okButton;
 	private JTextField firstNameField;
 	private JTextField dateOfBirthField;
 	private JTextField lastNameField;
-	protected MainFrame parent;
-	protected JPanel buttonPanel;
 	
 	public AddPanel(MainFrame parent) {
 		this.parent = parent;
@@ -85,7 +85,7 @@ public class AddPanel extends JPanel implements ActionListener {
 		return fieldPanel;
 	}
 
-	protected JTextField getDateOfBirthField() {
+	private JTextField getDateOfBirthField() {
 		if (dateOfBirthField == null) {
 			dateOfBirthField = new JTextField();
 			dateOfBirthField.setName("dateOfBirthField"); //$NON-NLS-1$
@@ -93,7 +93,7 @@ public class AddPanel extends JPanel implements ActionListener {
 		return dateOfBirthField;
 	}
 
-	protected JTextField getLastNameField() {
+	private JTextField getLastNameField() {
 		if (lastNameField == null) {
 			lastNameField = new JTextField();
 			lastNameField.setName("lastNameField"); //$NON-NLS-1$
@@ -109,7 +109,7 @@ public class AddPanel extends JPanel implements ActionListener {
 		
 	}
 
-	protected JTextField getFirstNameField() {
+	private JTextField getFirstNameField() {
 		if (firstNameField == null) {
 			firstNameField = new JTextField();
 			firstNameField.setName("firstNameField");  //$NON-NLS-1$

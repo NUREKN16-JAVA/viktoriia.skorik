@@ -9,39 +9,38 @@ import ua.nure.kn.skorik.usermanagement.User;
 public class MockUserDao implements UserDao {
 
 	private long id = 0;
-    private Map<Long, User> users = new HashMap<>();
+	private Map users = new HashMap();
+	
+	@Override
+	public User create(User user) throws DatabaseException {
+		Long currentId = new Long(++id);
+		user.setId(currentId);
+		users.put(currentId, user);
+		return user;
+	}
 
-    @Override
-    public User create(User user) throws DatabaseException {
-        Long currentId = new Long(++id);
-        user.setId(currentId);
-        users.put(currentId, user);
-        return user;
-    }
+	@Override
+	public User find(Long id) throws DatabaseException {
+		return (User) users.get(id);
+	}
 
-    @Override
-    public void update(User user) throws DatabaseException {
-        Long currentId = user.getId();
-        users.remove(currentId);
-        users.put(currentId, user);
-    }
+	@Override
+	public Collection<User> findAll() throws DatabaseException {
+		return users.values();
+	}
 
-    @Override
-    public void delete(User user) throws DatabaseException {
-        Long currentId = user.getId();
-        users.remove(currentId);
+	@Override
+	public void update(User user) throws DatabaseException {
+		Long currentId = user.getId();
+		users.remove(currentId);
+		users.put(currentId, user);
+	}
 
-    }
-
-    @Override
-    public User find(Long id) throws DatabaseException {
-        return users.get(id);
-    }
-
-    @Override
-    public Collection<User> findAll() throws DatabaseException {
-        return users.values();
-    }
+	@Override
+	public void delete(User user) throws DatabaseException {
+		Long currentId = user.getId();
+		users.remove(currentId);
+	}
 
 	@Override
 	public void setConnectionFactory(ConnectionFactory connectionFactory) throws DatabaseException {

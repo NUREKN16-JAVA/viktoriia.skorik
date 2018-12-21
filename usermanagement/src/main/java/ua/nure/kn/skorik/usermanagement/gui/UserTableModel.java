@@ -11,9 +11,8 @@ import ua.nure.kn.skorik.usermanagement.util.Messages;
 
 public class UserTableModel extends AbstractTableModel {
 
-	private static final String[] COLUMN_NAMES = { Messages.getString("UserTableModel.ID"), //$NON-NLS-1$
-			Messages.getString("UserTableModel.first_name"), Messages.getString("UserTableModel.last_name") }; //$NON-NLS-1$ //$NON-NLS-2$
-	private static final Class<?>[] COLUMN_CLASSES = { Long.class, String.class, String.class };
+	private static final String[] COLUMN_NAMES = { Messages.getString("UserTableModel.ID"), Messages.getString("UserTableModel.first_name"), Messages.getString("UserTableModel.last_name") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	private static final Class<?>[] COLUMN_CLASSES = {Long.class, String.class, String.class};
 	private List users = null;
 
 	public UserTableModel(Collection users) {
@@ -52,19 +51,6 @@ public class UserTableModel extends AbstractTableModel {
 			return user.getLastName();
 		}
 		return null;
-	}
-
-	public User getUser(int index) {
-		return (User) users.get(index);
-	}
-
-	public void addUsers(Collection users) {
-		this.users.addAll(users);
-
-	}
-
-	public void clearUsers() {
-		this.users = new ArrayList();
 	}
 
 }
