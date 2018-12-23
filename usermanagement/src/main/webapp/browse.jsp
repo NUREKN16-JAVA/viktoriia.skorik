@@ -1,7 +1,8 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head><title>User management/Browse</title></head>
 <body>
+    <form action="<%=request.getContextPath()%>/browse" method="post">
     <table id=”userTable” border=”1”>
     	<tr>
     		<th></th>
@@ -18,5 +19,10 @@
             </tr>
         </c:forEach>
     </table>
+	    <input type="submit" name="addButton" value="Add">
+	    <input type="submit" name="editButton" value="Edit">
+	    <input type="submit" name="deleteButton" value="Delete">
+	    <input type="submit" name="detailsButton" value="Details">
+    </form>>
 </body>
 </html>
